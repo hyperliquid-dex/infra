@@ -4,13 +4,13 @@
 
 ## Installation
 Set up directory structure:
-```bash
+```
 mkdir -p ~/cham/data
 mkdir ~/cham/hyperliquid_data
 git clone https://github.com/hyperliquid-dex/infra ~/cham/code
 ```
 
-Install tendermint 0.34.24 to somewhere in your path: `https://github.com/tendermint/tendermint/releases/tag/v0.34.24`
+Install tendermint 0.34.24 to somewhere in your PATH. See `https://github.com/tendermint/tendermint/releases/tag/v0.34.24` for details.
 
 Create an AWS S3 bucket for archiving of data, and put in `code/config.json`
 
@@ -19,8 +19,13 @@ Use the relevant binary for your operating system, e.g.
 mv ~/cham/code/binaries/linux_x86/chameleon-hl ~/cham/code
 ```
 
+Note that Windows is not supported at this time.
+
 ## Running a non-validating node
-Generate tendermint genesis file: `python3 ~/cham/code/non_validator_setup.py`
+Generate tendermint genesis file:
+```
+python3 ~/cham/code/non_validator_setup.py
+```
 
 Run the node:
 ```
@@ -50,9 +55,9 @@ This dumps the entire ABCI state to human readable JSON file. Load this file up 
 This project is licensed under the terms of the `MIT` license. See [LICENSE](LICENSE.md) for more details.
 
 ```bibtex
-@misc{hyperliquid-core,
+@misc{hyperliquid-infra,
   author = {Hyperliquid},
-  title = {Core infrastructure for Hyperliquid L1},
+  title = {Chameleon client implementation for Hyperliquid L1},
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
