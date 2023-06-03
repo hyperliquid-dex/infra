@@ -11,8 +11,7 @@ git clone https://github.com/hyperliquid-dex/infra ~/cham/code
 ```
 
 Install tendermint 0.34.24 to somewhere in your PATH. See `https://github.com/tendermint/tendermint/releases/tag/v0.34.24` for details.
-
-Create an AWS S3 bucket for archiving of data, and put in `code/config.json`
+Install lz4 1.9.4 to your PATH. See `https://github.com/lz4/lz4/releases/tag/v1.9.4` for details.
 
 Use the relevant binary for your operating system, e.g.
 ```
@@ -29,7 +28,7 @@ python3 ~/cham/code/non_validator_setup.py
 
 Run the node:
 ```
-cd ~/cham/code && ./chameleon-hl run-non-validator --chain Testnet --config config.json
+cd ~/cham/code && ./chameleon-hl run-non-validator --chain Testnet
 ```
 
 This command runs `tendermint` in the background, logging to `/tmp/tendermint_out`
@@ -50,6 +49,14 @@ To inspect a specific snapshot, try the following:
 ```
 
 This dumps the entire ABCI state to human readable JSON file. Load this file up in your scripting language of choice to analyze the fields.
+
+## Archiving data to S3
+The node can generate up to 10GB/day of data and logs at current usage levels.
+To automatically archive data to s3, create an AWS S3 bucket and put it in `code/config.json`.
+Then run the node as follows:
+```
+cd ~/cham/code && ./chameleon-hl run-non-validator --chain Testnet --config config.json
+```
 
 ## License
 This project is licensed under the terms of the `MIT` license. See [LICENSE](LICENSE.md) for more details.
