@@ -15,7 +15,7 @@ Install lz4 1.9.4 to your PATH. See `https://github.com/lz4/lz4/releases/tag/v1.
 
 Use the relevant binary for your operating system, e.g.
 ```
-mv ~/cham/code/binaries/linux_x86/chameleon-hl ~/cham/code
+mv ~/cham/code/binaries/debian_x86/chameleon-hl ~/cham/code
 ```
 
 Note that Windows is not supported at this time.
@@ -56,6 +56,24 @@ To automatically archive data to s3, create an AWS S3 bucket and put it in `code
 Then run the node as follows:
 ```
 cd ~/cham/code && ./chameleon-hl run-non-validator --chain Testnet --config config.json
+```
+
+## Troubleshooting
+If shared libraries cannot be found, your OS may be using a different version of openssl. You can fix it by manually building and linking the expected version:
+```
+mkdir /tmp/ssl && cd /tmp/ssl
+wget https://www.openssl.org/source/openssl-1.1.1o.tar.gz
+tar -zxvf openssl-1.1.1o.tar.gz
+cd openssl-1.1.1o
+./config && make
+mkdir ~/ssllib
+mv /tmp/ssl/openssl-1.1.1o/libcrypto.so.1.1 ~/ssllib
+mv /tmp/ssl/openssl-1.1.1o/libssl.so.1.1 ~/ssllib
+```
+
+And then run the following, or add to your shell startup file:
+```
+export LD_LIBRARY_PATH=$HOME/ssllib:$LD_LIBRARY_PATH
 ```
 
 ## License
