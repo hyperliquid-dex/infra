@@ -2,6 +2,11 @@
 
 `chameleon-hl` is a reference implementation of the Hyperliquid protocol.
 
+## Specs
+At current network loads, a `m5.large` EC2 instance or equivalent will suffice.
+
+If you have configured S3 backup as described below, 50gb of disk should be enough. Otherwise, you will need to have a process to archive or delete the data files that accumulate.
+
 ## Installation
 Set up directory structure:
 ```
@@ -21,17 +26,13 @@ mv ~/cham/code/binaries/debian_x86/chameleon-hl ~/cham/code
 Note that Windows is not supported at this time.
 
 ## Running a non-validating node
-Generate tendermint genesis file:
+Generate tendermint genesis file and run the node:
+
 ```
-python3 ~/cham/code/non_validator_setup.py
+cd ~/cham/code && python3 non_validator_setup.py --chain Testnet && ./chameleon-hl run-non-validator --chain Testnet
 ```
 
-Run the node:
-```
-cd ~/cham/code && ./chameleon-hl run-non-validator --chain Testnet
-```
-
-This command runs `tendermint` in the background, logging to `/tmp/tendermint_out`
+The binary runs `tendermint` in the background, logging to `/tmp/tendermint_out`
 
 You should see tendermint retrieve the initial state through state sync first, and then stream new blocks.
 
@@ -51,7 +52,7 @@ To inspect a specific snapshot, try the following:
 This dumps the entire ABCI state to human readable JSON file. Load this file up in your scripting language of choice to analyze the fields.
 
 ## Archiving data to S3
-The node can generate up to 10GB/day of data and logs at current usage levels.
+The node can generate up to 10gb/day of data and logs at current usage levels.
 To automatically archive data to s3, create an AWS S3 bucket and put it in `code/config.json`.
 Then run the node as follows:
 ```
