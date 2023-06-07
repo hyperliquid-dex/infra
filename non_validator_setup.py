@@ -6,7 +6,8 @@ import tomli
 import tomli_w
 import subprocess
 
-TESTNET_RPC = "http://35.73.179.90:26657"
+TESTNET_PORT = 26657
+TESTNET_RPC = f"http://35.73.179.90:{TESTNET_PORT}"
 
 TESTNET_INFO = {
     "NvTestnet": {
@@ -23,12 +24,14 @@ CONFIG_HOME = os.path.expanduser("~/cham/nv_tendermint/config")
 
 
 def query_trust_height():
-    trust_height = 1
+    trust_height = None
     for node in TESTNET_INFO.values():
-        resp = requests.post(f"{TESTNET_RPC}/commit?height=1").json()
-        earliest_height = int(resp["error"]["data"].split(' ')[-1])
-        trust_height = max(trust_height, earliest_height)
-    return trust_height
+        resp = requests.post(f'http://{node["ip"]}:{TESTNET_PORT}/commit').json()
+        height = int(resp["result"]["signed_header"]["commit"]["height"])
+        if not trust_height:
+            trust_height = height
+        trust_height = min(trust_height, height)
+    return trust_height - 2000
 
 
 def query_trust_params():
