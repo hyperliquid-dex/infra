@@ -22,8 +22,18 @@ TESTNET_INFO = {
 CONFIG_HOME = os.path.expanduser("~/cham/nv_tendermint/config")
 
 
+def query_trust_height():
+    trust_height = 1
+    for node in TESTNET_INFO.values():
+        resp = requests.post(f"{TESTNET_RPC}/commit?height=1").json()
+        earliest_height = int(resp["error"]["data"].split(' ')[-1])
+        trust_height = max(trust_height, earliest_height)
+    return trust_height
+
+
 def query_trust_params():
-    resp = requests.post(f"{TESTNET_RPC}/commit").json()
+    trust_height = query_trust_height()
+    resp = requests.post(f"{TESTNET_RPC}/commit?height={trust_height}").json()
     commit_details = resp["result"]["signed_header"]["commit"]
     trust_height = int(commit_details["height"])
     trust_hash = commit_details["block_id"]["hash"]
